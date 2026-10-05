@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Личное приглашение на прогулку для Анны">
+  <title>Анна, пойдём гулять?</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="screen screen--active" data-screen="question" aria-labelledby="question-title">
+      <h1 id="question-title">Анна,<br><em>готова ли ты</em><br>пойти со мной<br>на прогулку?</h1>
+      <div class="question-actions">
+        <button class="button button--yes" id="yes-button" type="button">Да <span>→</span></button>
+        <button class="button button--no" id="no-button" type="button">Нет</button>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="event" aria-labelledby="event-title" aria-hidden="true">
+      <h2 id="event-title">Выбирай<br><em>настроение</em> прогулки</h2>
+      <div class="choice-grid" role="group" aria-label="Выбор мероприятия">
+        <button class="choice" type="button" data-event="Океанариум"><span>01</span>Океанариум</button>
+        <button class="choice" type="button" data-event="Зоопарк"><span>02</span>Зоопарк</button>
+        <button class="choice" type="button" data-event="Крутой парк"><span>03</span>Крутой парк</button>
+        <button class="choice" type="button" data-event="Котокафе"><span>04</span>Котокафе</button>
+        <button class="choice" type="button" data-event="Оранжерея"><span>05</span>Оранжерея</button>
+        <button class="choice choice--custom" id="custom-event" type="button"><span>06</span>Свой вариант <b>+</b></button>
+      </div>
+      <p class="selected-note" id="selected-event" aria-live="polite">Сначала выбери место</p>
+      <button class="button button--next" id="event-next" type="button" disabled>К выбору времени <span>→</span></button>
+    </section>
+
+    <section class="screen" data-screen="time" aria-labelledby="time-title" aria-hidden="true">
+      <h2 id="time-title">Предложи<br><em>свой момент</em></h2>
+      <form class="time-form" id="time-form">
+        <label>Дата<input id="date" name="date" type="date" required></label>
+        <label>Время<input id="time" name="time" type="time" required></label>
+        <div class="final-choice"><span>Твой выбор</span><strong id="final-event">—</strong></div>
+        <button class="button button--yes" type="submit">Отправить ответ <span>→</span></button>
+      </form>
+      <p class="form-message" id="form-message" aria-live="polite"></p>
+    </section>
+
+  </main>
+
+  <dialog class="custom-dialog" id="custom-dialog">
+    <form method="dialog" class="dialog-card" id="custom-form">
+      <button class="dialog-close" value="cancel" aria-label="Закрыть">×</button>
+      <h2>Куда хочется<br><em>тебе?</em></h2>
+      <input id="custom-input" type="text" maxlength="80" placeholder="Например, на крышу с видом" autocomplete="off">
+      <div class="dialog-actions">
+        <button class="button button--ghost" value="cancel">Отмена</button>
+        <button class="button button--yes" id="custom-submit" value="default">Выбрать <span>→</span></button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+  <script src="app.js"></script>
+</body>
+</html>

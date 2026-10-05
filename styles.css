@@ -1,0 +1,165 @@
+:root {
+  --ink: #192a24;
+  --muted: #718079;
+  --paper: #fff;
+  --line: #dcd8cd;
+  --green: #b9d8c5;
+  --green-dark: #2f6b50;
+  --coral: #e76f51;
+  --yellow: #eecb68;
+}
+
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+}
+button, input { font: inherit; }
+button { cursor: pointer; }
+
+.app-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: clamp(24px, 7vh, 72px) clamp(24px, 9vw, 160px) 28px;
+  overflow: visible;
+  background: var(--paper);
+}
+.screen {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  width: min(100%, 960px);
+  padding: 7vh 0 5vh;
+  animation: appear .45s ease both;
+}
+.screen--active { display: flex; }
+h1, h2 {
+  max-width: 900px;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -.06em;
+  line-height: .93;
+}
+h1 { font-size: clamp(3.5rem, 7vw, 7.5rem); }
+h2 { font-size: clamp(2.8rem, 8vw, 6.2rem); }
+h1 em, h2 em {
+  color: var(--green-dark);
+  font-family: Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -.06em;
+}
+.question-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 74px;
+  margin-top: 50px;
+}
+.button {
+  border: 0;
+  border-radius: 999px;
+  transition: transform .2s ease, background .2s ease, opacity .2s ease;
+}
+.button:focus-visible, .choice:focus-visible, input:focus-visible { outline: 3px solid var(--yellow); outline-offset: 4px; }
+.button--yes {
+  padding: 24px 32px;
+  color: #fff;
+  background: var(--green-dark);
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+.button--yes span { display: inline-block; margin-left: 24px; font-size: 1.1em; transition: transform .2s; }
+.button--yes:hover { background: #23553e; transform: translateY(-2px); }
+.button--yes:hover span { transform: translateX(5px); }
+.button--no {
+  padding: 16px 23px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  font-size: 1rem;
+}
+.button--no.is-fleeing { position: fixed; z-index: 5; transition: left .16s ease, right .16s ease, top .16s ease; }
+.selected-note, .form-message {
+  color: var(--muted);
+  font-size: 1rem;
+}
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 660px;
+  margin-top: 38px;
+}
+.choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 76px;
+  padding: 16px 20px;
+  color: var(--ink);
+  text-align: left;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  font-size: 1rem;
+  transition: transform .2s, background .2s, border-color .2s;
+}
+.choice span { color: var(--coral); font: 500 11px Consolas, monospace; }
+.choice b { color: var(--coral); font-size: 1.35rem; font-weight: 400; }
+.choice:hover, .choice.is-selected { border-color: var(--green-dark); background: var(--green); transform: translateY(-3px); }
+.choice.is-selected { box-shadow: 4px 4px 0 var(--green-dark); }
+.selected-note { min-height: 18px; margin: 20px 0 14px; }
+.button--next { align-self: flex-start; padding: 15px 20px; color: var(--paper); background: var(--ink); font-size: .86rem; }
+.button--next span { margin-left: 18px; }
+.button--next:disabled { cursor: not-allowed; opacity: .35; }
+.time-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 660px; margin-top: 40px; }
+.time-form label { display: flex; flex-direction: column; gap: 8px; color: var(--muted); font: 500 11px Consolas, monospace; letter-spacing: .08em; text-transform: uppercase; }
+.time-form input { width: 100%; padding: 15px 14px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 2px; }
+.final-choice { grid-column: 1 / -1; display: flex; justify-content: space-between; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.final-choice span { color: var(--muted); font-size: .8rem; }
+.final-choice strong { font-size: .95rem; }
+.time-form .button { grid-column: 1 / -1; justify-self: start; margin-top: 5px; }
+.form-message { grid-column: 1 / -1; min-height: 20px; margin: 0; }
+.custom-dialog { padding: 0; color: var(--ink); background: transparent; border: 0; }
+.custom-dialog::backdrop { background: rgba(25, 42, 36, .45); backdrop-filter: blur(4px); }
+.dialog-card { position: relative; width: min(90vw, 480px); padding: 34px; background: var(--paper); box-shadow: 12px 12px 0 var(--green-dark); }
+.dialog-card h2 { font-size: clamp(2.5rem, 8vw, 4rem); }
+.dialog-card input { width: 100%; margin: 30px 0 20px; padding: 15px 0; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--ink); outline: 0; }
+.dialog-close { position: absolute; top: 10px; right: 15px; color: var(--muted); background: none; border: 0; font-size: 28px; }
+.dialog-actions { display: flex; gap: 10px; }
+.dialog-actions .button { padding: 13px 17px; }
+.button--ghost { color: var(--muted); background: transparent; border: 1px solid var(--line); }
+.confetti-layer { position: fixed; inset: 0; z-index: 20; pointer-events: none; overflow: hidden; }
+.confetti { position: absolute; top: -20px; width: 9px; height: 16px; background: var(--coral); animation: fall 1.7s cubic-bezier(.2,.8,.3,1) forwards; }
+
+@keyframes appear { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fall { to { transform: translate3d(var(--drift), 110vh, 0) rotate(var(--spin)); opacity: 0; } }
+@media (max-width: 560px) {
+  .app-shell { padding: 24px; }
+  .screen { padding: 8vh 0 5vh; }
+  .choice-grid { grid-template-columns: 1fr; margin-top: 30px; }
+  .choice { min-height: 64px; }
+  .time-form { grid-template-columns: 1fr; }
+  .final-choice { grid-column: 1; }
+  .time-form .button, .form-message { grid-column: 1; }
+  .dialog-card { padding: 28px 24px; }
+}
+@media (max-height: 800px) and (min-width: 561px) {
+  .app-shell { padding-top: 20px; padding-bottom: 16px; }
+  .screen { padding: 4vh 0 3vh; }
+  h1 { font-size: clamp(3rem, 8vw, 5.5rem); }
+  .question-actions { margin-top: 32px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

@@ -1,6 +1,12 @@
 const screens = [...document.querySelectorAll('.screen')];
 const state = { event: '' };
 const noButton = document.querySelector('#no-button');
+const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeIo2RgX6OmmlnRe9DcoaQhhFbzd87XeQYv-KYAI8McGiTDcw/formResponse';
+const GOOGLE_FORM_FIELDS = {
+  event: 'entry.1647409354',
+  date: 'entry.302324213',
+  time: 'entry.211935560'
+};
 
 function showScreen(name) {
   screens.forEach((screen) => {
@@ -88,23 +94,40 @@ document.querySelector('#event-next').addEventListener('click', () => {
 
 const dateInput = document.querySelector('#date');
 dateInput.min = new Date().toISOString().slice(0, 10);
-document.querySelector('#time-form').addEventListener('submit', async (event) => {
+
+function sendToGoogleForm(values) {
+  let frame = document.querySelector('#google-form-response-frame');
+  if (!frame) {
+    frame = document.createElement('iframe');
+    frame.id = 'google-form-response-frame';
+    frame.name = 'google-form-response-frame';
+    frame.title = 'Скрытая отправка ответа';
+    frame.hidden = true;
+    document.body.append(frame);
+  }
+
+  const form = document.createElement('form');
+  form.action = GOOGLE_FORM_ACTION;
+  form.method = 'POST';
+  form.target = frame.name;
+  form.hidden = true;
+  Object.entries(GOOGLE_FORM_FIELDS).forEach(([key, fieldName]) => {
+    const input = document.createElement('input');
+    input.name = fieldName;
+    input.value = values[key];
+    form.append(input);
+  });
+  document.body.append(form);
+  form.submit();
+  window.setTimeout(() => form.remove(), 1500);
+}
+
+document.querySelector('#time-form').addEventListener('submit', (event) => {
   event.preventDefault();
   const message = document.querySelector('#form-message');
   const button = event.currentTarget.querySelector('button[type="submit"]');
   button.disabled = true;
-  message.textContent = 'Сохраняю ответ…';
-  try {
-    const response = await fetch('/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event: state.event, date: dateInput.value, time: document.querySelector('#time').value })
-    });
-    if (!response.ok) throw new Error('save failed');
-    message.textContent = 'Готово! Я уже начинаю ждать эту прогулку ✳';
-    button.textContent = 'Ответ отправлен';
-  } catch (error) {
-    message.textContent = 'Не удалось сохранить ответ. Проверь, что сайт запущен через сервер с Python.';
-    button.disabled = false;
-  }
+  sendToGoogleForm({ event: state.event, date: dateInput.value, time: document.querySelector('#time').value });
+  message.textContent = 'Готово! Ответ отправлен ✳';
+  button.textContent = 'Ответ отправлен';
 });
